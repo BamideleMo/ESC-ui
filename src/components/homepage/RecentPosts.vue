@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { PostType } from '@/utils/types'
+import { useMediaQuery } from '@vueuse/core'
 import PostsContainer from './PostsContainer.vue'
+const isMobile = useMediaQuery('(max-width: 640px)')
 
 const posts: PostType[] = [
   {
@@ -32,10 +34,11 @@ const posts: PostType[] = [
 
 <template>
   <div class="flex justify-center flex-col">
-    <div class="recent ml-5">RECENT POSTS</div>
-    <div class="flex flex-row mx-12 mb-10">
+    <div class="recent ml-5" :style="{ fontSize: isMobile ? '20px' : '30px' }">RECENT POSTS</div>
+    <div class="flex flex-row mx-12 mb-10" :class="{ 'flex-col': isMobile }">
       <PostsContainer
         v-for="post in posts"
+        class="mb-3"
         :title="post.title"
         :image="post.image"
         :description="post.description"
@@ -49,7 +52,6 @@ const posts: PostType[] = [
 <style>
 .recent {
   font-weight: 800;
-  font-size: 30px;
   margin-bottom: 2rem;
   margin-left: 2rem;
 }

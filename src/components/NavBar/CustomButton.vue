@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { LinkType } from '@/utils/types'
+import { useMediaQuery } from '@vueuse/core'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
@@ -10,6 +11,7 @@ const positions = ref<{ right: string; left: string; top: string; marginLeft?: s
   left: '0px',
   top: '0px'
 })
+const isPreferredDark = useMediaQuery('(prefers-color-scheme: dark)')
 
 const props = defineProps<{
   linkText: string
@@ -18,6 +20,7 @@ const props = defineProps<{
   children?: LinkType[]
   isInDropDown?: boolean
   color?: string
+  isFromNav?: boolean
   click?: (payload: MouseEvent) => void
 }>()
 
@@ -38,14 +41,17 @@ onMounted(() => {
   <RouterLink
     v-if="props.to && !props.isDropDown"
     :to="props.to"
-    class="block py-2 pl-3 pt-3 pr-4 text-white mt-2 rounded  md:p-0 "
-    :style="{color: props.color}"
+    class="block py-2 pl-3 pt-3 pr-4 text-white mt-2 rounded md:p-0"
+    :style="{
+      color: props.color,
+      backgroundColor: props.isFromNav ? (isPreferredDark ? 'black' : 'white') : ''
+    }"
     :class="{
       'font-bold': !props.isInDropDown,
       'text-primary': !props.color,
-      'md:bg-transparent': !props.color,
+      'md:bg-transparent': !props.color && !props.isFromNav,
       'dark:bg-blue-600': !props.color,
-      'md:dark:bg-transparent': !props.color,
+      'md:dark:bg-transparent': !props.color && !props.isFromNav,
       'md:dark:text-white': !props.color,
       'md:text-blue-700': !props.color
     }"
@@ -55,7 +61,7 @@ onMounted(() => {
     ref="parentRef"
     :data-dropdown-toggle="props.linkText"
     v-else-if="props.to && props.isDropDown"
-    class="flex justify-content block py-2 pl-3 pr-4 mt-2 text-white text-primary rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent"
+    class="flex justify-content block py-2 pl-3 pr-4 mt-2 text-white text-primary rounded md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600"
     :class="{ 'font-bold': !props.isInDropDown }"
     @click="
       (event) => {
@@ -100,6 +106,7 @@ onMounted(() => {
             :to="link.link"
             :link-text="link.name"
             :isInDropDown="true"
+            :is-from-nav="props.isFromNav"
             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
           />
         </li>

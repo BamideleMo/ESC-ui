@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { StatementType } from '@/utils/types'
+import { useMediaQuery } from '@vueuse/core';
 import StamentCard from './StatementCard.vue'
+
+const isMobile = useMediaQuery('(max-width: 640px)')
 
 const staments: StatementType[] = [
   {
@@ -23,7 +26,7 @@ const staments: StatementType[] = [
 </script>
 
 <template>
-  <div class="my-12">
+  <div :class="{'my-12': !isMobile}">
     <StamentCard
       v-for="statement in staments"
       :text="statement.text"
