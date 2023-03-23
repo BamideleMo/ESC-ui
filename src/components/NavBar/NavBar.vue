@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LinkType } from '@/utils/types'
 import { RouterLink } from 'vue-router'
-import Button from './NavBar/CustomButton.vue'
+import Button from './CustomButton.vue'
 
 const links: LinkType[] = [
   {

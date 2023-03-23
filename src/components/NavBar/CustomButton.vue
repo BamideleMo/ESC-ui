@@ -14,9 +14,10 @@ const positions = ref<{ right: string; left: string; top: string; marginLeft?: s
 const props = defineProps<{
   linkText: string
   to?: string
-  isDropDown?: boolean,
-  children?: LinkType[],
-  isInDropDown?: boolean,
+  isDropDown?: boolean
+  children?: LinkType[]
+  isInDropDown?: boolean
+  color?: string
   click?: (payload: MouseEvent) => void
 }>()
 
@@ -37,8 +38,17 @@ onMounted(() => {
   <RouterLink
     v-if="props.to && !props.isDropDown"
     :to="props.to"
-    class="block py-2 pl-3 pt-3 pr-4 text-white text-primary mt-2 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent"
-    :class="{ 'font-bold': !props.isInDropDown }"
+    class="block py-2 pl-3 pt-3 pr-4 text-white mt-2 rounded  md:p-0 "
+    :style="{color: props.color}"
+    :class="{
+      'font-bold': !props.isInDropDown,
+      'text-primary': !props.color,
+      'md:bg-transparent': !props.color,
+      'dark:bg-blue-600': !props.color,
+      'md:dark:bg-transparent': !props.color,
+      'md:dark:text-white': !props.color,
+      'md:text-blue-700': !props.color
+    }"
     >{{ props.linkText }}
   </RouterLink>
   <button
